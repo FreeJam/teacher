@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Инструменты учителя — калькулятор СОУ и успеваемости, конвертер баллов ОГЭ/ЕГЭ, рандомайзер «кто к доске», генератор рассадки и таймер урока.">
+<title>Инструменты учителя — СОУ, ОГЭ/ЕГЭ, таймер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css?v=3">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Инструменты учителя</h1>
+        <p>СОУ · ОГЭ/ЕГЭ · рассадка · таймер</p>
+      </div>
+    </div>
+    <div class="topbar-note" id="topbarNote"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Инструменты">
+    <button class="tab active" role="tab" aria-selected="true" data-tab="sou">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11"/><line x1="12" y1="11" x2="12" y2="11"/><line x1="16" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="12" y1="15" x2="12" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/><line x1="8" y1="19" x2="16" y2="19"/></svg>
+      <span>СОУ</span>
+    </button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="convert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+      <span>ОГЭ / ЕГЭ</span>
+    </button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="board">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Кто к доске</span>
+    </button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="seating">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      <span>Рассадка</span>
+    </button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="timer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/><path d="M12 2v3"/></svg>
+      <span>Таймер</span>
+    </button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ══════════ СОУ ══════════ -->
+    <section class="panel active" id="panel-sou" role="tabpanel">
+      <div class="panel-head">
+        <h2>Калькулятор СОУ и успеваемости</h2>
+        <p class="muted">Введите количество оценок — все показатели пересчитаются мгновенно.</p>
+      </div>
+
+      <div class="sou-grid">
+        <!-- Ввод -->
+        <div class="card card-input">
+          <div class="field-row">
+            <div class="field grow">
+              <label for="souClass">Школа / класс</label>
+              <input type="text" id="souClass" placeholder="8 «А» класс">
+            </div>
+            <div class="field grow">
+              <label for="souSubject">Предмет</label>
+              <input type="text" id="souSubject" placeholder="Информатика">
+            </div>
+          </div>
+          <div class="field">
+            <label for="souPeriod">Период</label>
+            <select id="souPeriod">
+              <option>I четверть</option>
+              <option>II четверть</option>
+              <option>III четверть</option>
+              <option>IV четверть</option>
+              <option>I полугодие</option>
+              <option>II полугодие</option>
+              <option selected>Год</option>
+            </select>
+          </div>
+
+          <div class="grades" id="gradeCounters">
+            <div class="grade-row" data-grade="5">
+              <span class="grade-label g5">«5»</span>
+              <button class="stepper minus" data-act="dec" aria-label="Убавить пятёрки">−</button>
+              <input type="number" class="grade-val" value="0" min="0" max="200" data-grade="5" inputmode="numeric">
+              <button class="stepper plus" data-act="inc" aria-label="Добавить пятёрки">+</button>
+            </div>
+            <div class="grade-row" data-grade="4">
+              <span class="grade-label g4">«4»</span>
+              <button class="stepper minus" data-act="dec" aria-label="Убавить четвёрки">−</button>
+              <input type="number" class="grade-val" value="0" min="0" max="200" data-grade="4" inputmode="numeric">
+              <button class="stepper plus" data-act="inc" aria-label="Добавить четвёрки">+</button>
+            </div>
+            <div class="grade-row" data-grade="3">
+              <span class="grade-label g3">«3»</span>
+              <button class="stepper minus" data-act="dec" aria-label="Убавить тройки">−</button>
+              <input type="number" class="grade-val" value="0" min="0" max="200" data-grade="3" inputmode="numeric">
+              <button class="stepper plus" data-act="inc" aria-label="Добавить тройки">+</button>
+            </div>
+            <div class="grade-row" data-grade="2">
+              <span class="grade-label g2">«2»</span>
+              <button class="stepper minus" data-act="dec" aria-label="Убавить двойки">−</button>
+              <input type="number" class="grade-val" value="0" min="0" max="200" data-grade="2" inputmode="numeric">
+              <button class="stepper plus" data-act="inc" aria-label="Добавить двойки">+</button>
+            </div>
+            <div class="grade-row" data-grade="na">
+              <span class="grade-label gna">н/а</span>
+              <button class="stepper minus" data-act="dec" aria-label="Убавить неаттестованных">−</button>
+              <input type="number" class="grade-val" value="0" min="0" max="200" data-grade="na" inputmode="numeric">
+              <button class="stepper plus" data-act="inc" aria-label="Добавить неаттестованных">+</button>
+            </div>
+          </div>
+
+          <div class="chips-stats">
+            <span class="chip">Всего: <b id="souTotal">0</b></span>
+            <span class="chip">Аттестовано: <b id="souAssessed">0</b></span>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="copyReport">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Скопировать отчёт
+            </button>
+            <button class="btn btn-ghost" id="printReport">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Печать / PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Результат -->
+        <div class="card card-results">
+          <div class="results-grid" id="resultsGrid">
+            <div class="metric" data-metric="success">
+              <div class="ring" data-ring="success"></div>
+              <div class="metric-body">
+                <span class="metric-label">Успеваемость</span>
+                <span class="metric-value" id="mSuccess">—</span>
+              </div>
+            </div>
+            <div class="metric" data-metric="quality">
+              <div class="ring" data-ring="quality"></div>
+              <div class="metric-body">
+                <span class="metric-label">Качество знаний</span>
+                <span class="metric-value" id="mQuality">—</span>
+              </div>
+            </div>
+            <div class="metric" data-metric="sou">
+              <div class="ring" data-ring="sou"></div>
+              <div class="metric-body">
+                <span class="metric-label">СОУ (по Симонову)</span>
+                <span class="metric-value" id="mSou">—</span>
+              </div>
+            </div>
+            <div class="metric" data-metric="avg">
+              <div class="ring" data-ring="avg"></div>
+              <div class="metric-body">
+                <span class="metric-label">Средний балл</span>
+                <span class="metric-value" id="mAvg">—</span>
+              </div>
+            </div>
+          </div>
+          <p class="formula-hint">СОУ = (5·100 + 4·64 + 3·36 + 2·16 + н/а·7) ÷ всего учеников</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ОГЭ/ЕГЭ ══════════ -->
+    <section class="panel" id="panel-convert" role="tabpanel">
+      <div class="panel-head">
+        <h2>Конвертер баллов ОГЭ / ЕГЭ</h2>
+        <p class="muted">Перевод первичных баллов в тестовые (ЕГЭ) или в оценку (ОГЭ).</p>
+      </div>
+
+      <div class="convert-grid">
+        <div class="card">
+          <div class="segmented" role="tablist" id="examMode">
+            <button class="seg active" data-mode="ege" role="tab" aria-selected="true">ЕГЭ</button>
+            <button class="seg" data-mode="oge" role="tab" aria-selected="false">ОГЭ</button>
+          </div>
+
+          <div class="subject-chips" id="subjectChips"></div>
+
+          <div class="score-row">
+            <div class="field grow">
+              <label for="scoreInput" id="scoreLabel">Первичный балл</label>
+              <input type="number" id="scoreInput" value="0" min="0" max="100" inputmode="numeric">
+            </div>
+            <div class="range-wrap grow">
+              <input type="range" id="scoreRange" min="0" max="100" value="0">
+            </div>
+          </div>
+
+          <div class="convert-result" id="convertResult">
+            <div class="convert-big" id="convertBig">—</div>
+            <div class="convert-sub" id="convertSub">Выберите предмет и введите балл</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3 id="tableTitle">Шкала перевода</h3>
+            <span class="muted" id="tableNote"></span>
+          </div>
+          <div class="scale-table-wrap" id="scaleTable"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ Кто к доске ══════════ -->
+    <section class="panel" id="panel-board" role="tabpanel">
+      <div class="panel-head">
+        <h2>Кто к доске?</h2>
+        <p class="muted">Введите список класса (по одному ученику в строке) и запустите выбор.</p>
+      </div>
+
+      <div class="board-grid">
+        <div class="card">
+          <div class="field">
+            <label for="classList">Список класса</label>
+            <textarea id="classList" rows="12" placeholder="Иванов Иван&#10;Петрова Мария&#10;Сидоров Пётр"></textarea>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="excludePicked" checked>
+            <span>Исключать выбранных (не повторять, пока не закончится список)</span>
+          </label>
+        </div>
+
+        <div class="card card-board-stage">
+          <div class="stage" id="boardStage">
+            <div class="stage-name" id="boardName">Нажмите «Выбрать»</div>
+            <div class="stage-idle">Введите список и запустите</div>
+          </div>
+          <div class="btn-row center">
+            <button class="btn btn-primary btn-lg" id="pickBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+              Выбрать ученика
+            </button>
+          </div>
+          <div class="board-meta">
+            <span class="chip">В списке: <b id="boardTotal">0</b></span>
+            <span class="chip">Осталось: <b id="boardLeft">0</b></span>
+            <button class="btn btn-ghost btn-sm" id="resetPicked">Сбросить выбор</button>
+          </div>
+          <div class="picked-list" id="pickedList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ Рассадка ══════════ -->
+    <section class="panel" id="panel-seating" role="tabpanel">
+      <div class="panel-head">
+        <h2>Генератор рассадки</h2>
+        <p class="muted">Настройте парты и перемешайте учеников случайным образом.</p>
+      </div>
+
+      <div class="seating-grid">
+        <div class="card">
+          <div class="field-row">
+            <div class="field">
+              <label for="seatRows">Рядов</label>
+              <input type="number" id="seatRows" value="3" min="1" max="10" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="seatDesks">Парт в ряду</label>
+              <input type="number" id="seatDesks" value="2" min="1" max="10" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="seatPerDesk">За партой</label>
+              <select id="seatPerDesk">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="seatList">Список учеников (по одному в строке)</label>
+            <textarea id="seatList" rows="10" placeholder="Иванов Иван&#10;Петрова Мария"></textarea>
+          </div>
+          <div class="field">
+            <label for="seatPinned">Зафиксировать за первой партой (по здоровью), через запятую</label>
+            <input type="text" id="seatPinned" placeholder="Иванов Иван">
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="shuffleBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+              Перемешать
+            </button>
+            <button class="btn btn-ghost" id="exportSeating">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Скопировать
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="board-wrap" id="seatingBoard">
+            <div class="empty-state" id="seatingEmpty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+              <p>Настройте парты и нажмите «Перемешать»</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ Таймер ══════════ -->
+    <section class="panel" id="panel-timer" role="tabpanel">
+      <div class="panel-head">
+        <h2>Таймер урока</h2>
+        <p class="muted">Крупный таймер для проектора со звуковым сигналом по завершении.</p>
+      </div>
+
+      <div class="timer-grid">
+        <div class="card">
+          <div class="presets" id="timerPresets">
+            <button class="preset" data-sec="60">1 мин</button>
+            <button class="preset" data-sec="300">5 мин</button>
+            <button class="preset" data-sec="900">15 мин</button>
+            <button class="preset" data-sec="2700">45 мин</button>
+          </div>
+          <div class="field-row timer-set">
+            <div class="field">
+              <label for="timerMin">Минуты</label>
+              <input type="number" id="timerMin" value="5" min="0" max="180" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="timerSec">Секунды</label>
+              <input type="number" id="timerSec" value="0" min="0" max="59" inputmode="numeric">
+            </div>
+          </div>
+          <div class="btn-row center">
+            <button class="btn btn-primary btn-lg" id="timerStart">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              Старт
+            </button>
+            <button class="btn btn-ghost" id="timerReset">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg>
+              Сброс
+            </button>
+            <button class="btn btn-ghost" id="timerFull">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+              Во весь экран
+            </button>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="timerSound" checked>
+            <span>Звуковой сигнал по завершении</span>
+          </label>
+        </div>
+
+        <div class="card card-timer-face">
+          <div class="timer-face" id="timerFace">
+            <div class="timer-digits" id="timerDigits">05:00</div>
+            <div class="timer-state" id="timerState">Готово</div>
+          </div>
+          <div class="timer-ring" id="timerRing"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>Сделано для freejam.online</span>
+    <span class="dot">·</span>
+    <span>Шкалы баллов — Рособрнадзор, 2025</span>
+  </footer>
+</div>
+
+<!-- Полноэкранный таймер -->
+<div class="fullscreen-timer" id="fullscreenTimer" hidden>
+  <div class="fs-close" id="fsClose" aria-label="Закрыть">✕</div>
+  <div class="fs-digits" id="fsDigits">05:00</div>
+  <div class="fs-state" id="fsState"></div>
+</div>
+
+<!-- Печатный отчёт СОУ -->
+<div class="print-report" id="printReportArea"></div>
+
+<script src="js/data.js?v=2"></script>
+<script src="js/app.js?v=2"></script>
+</body>
+</html>
